@@ -10,8 +10,13 @@ export const createPost = async (req, res) => {
     }
 };
 export const getPosts = async (req, res) => {
+    const { _page, _limit } = req.query;
+    const options = {
+        page: _page || 1,
+        limit: _limit || 5,
+    };
     try {
-        const posts = await Post.find();
+        const posts = await Post.paginate({}, options);
         return res.status(200).json(posts);
     } catch (error) {
         return res.status(400).json({ error: error.message });

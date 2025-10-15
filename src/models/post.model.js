@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const postSchema = new mongoose.Schema(
     {
@@ -9,6 +10,16 @@ const postSchema = new mongoose.Schema(
         content: {
             type: String,
         },
+        comments: [
+            {
+                title: {
+                    type: String,
+                },
+                content: {
+                    type: String,
+                },
+            },
+        ],
     },
     {
         timestamps: true,
@@ -16,5 +27,8 @@ const postSchema = new mongoose.Schema(
     }
 );
 
+postSchema.plugin(mongoosePaginate);
 const Post = mongoose.model("Post", postSchema);
 export default Post;
+
+// Post.find(); => [{}]

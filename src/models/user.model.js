@@ -2,20 +2,36 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
-        name: {
+        phone: {
             type: String,
-            required: [true, "Vui lòng cung cấp tên"],
-            trim: true,
+            required: [true, "Vui lòng cung cấp số điện thoại"],
+            unique: true,
+            validate: {
+                validator: (v) => /^\d{10}$/.test(v),
+                message: (props) => `${props.value} không phải là số điện thoại hợp lệ!`,
+            },
         },
         email: {
             type: String,
-            required: [true, "Vui lòng cung cấp email"],
-            unique: true,
             lowercase: true,
             match: [
                 /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                 "Vui lòng cung cấp địa chỉ email hợp lệ",
             ],
+        },
+        fullName: {
+            type: String,
+            required: [true, "Vui lòng cung cấp họ tên"],
+            trim: true,
+        },
+        dateOfBirth: {
+            type: Date,
+            validate: {
+                validator: function (date) {
+                    return date < new Date();
+                },
+                message: "Ngày sinh không thể là ngày trong tương lai",
+            },
         },
         password: {
             type: String,
@@ -29,12 +45,20 @@ const userSchema = new mongoose.Schema(
             enum: ["customer", "staff", "admin"],
             default: "customer",
         },
-        phone: {
-            type: String,
-            validate: {
-                validator: (v) => /^\d{10}$/.test(v),
-                message: (props) => `${props.value} không phải là số điện thoại hợp lệ!`,
+        preferences: {
+            preferredStylist: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Stylist",
             },
+            notes: {
+                type: String,
+                maxlength: [500, "Ghi chú không được vượt quá 500 ký tự"],
+            },
+        },
+        loyaltyPoints: {
+            type: Number,
+            default: 0,
+            min: [0, "Điểm tích lũy không thể âm"],
         },
         addresses: [
             {
