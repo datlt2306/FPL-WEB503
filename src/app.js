@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import router from "./routers";
 import mongoose from "mongoose";
+import eventRouter from "./routers/events";
+import authRouter from "./routers/auth";
 
 dotenv.config();
 
@@ -13,7 +14,8 @@ mongoose.connect(`mongodb://localhost:27017/wd20203`);
 app.use(express.json());
 
 // router
-app.use("/api", router);
+app.use("/api/events", eventRouter);
+app.use("/api/auth", authRouter);
 
 const port = process.env.PORT || 3000;
 
