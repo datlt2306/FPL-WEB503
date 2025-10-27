@@ -5,13 +5,18 @@ import {
     getAllEvents,
     getEventById,
     updateEvent,
+    validateEventData,
+    validateEventId,
+    validateQueryParams,
 } from "../controllers/event";
 
 const router = Router();
 
-router.get("/", getAllEvents);
-router.get("/:id", getEventById);
-router.post("/", createEvent);
-router.put("/:id", updateEvent);
-router.delete("/:id", deleteEvent);
+// Apply validation middleware to routes
+router.get("/", validateQueryParams, getAllEvents);
+router.get("/:id", validateEventId, getEventById);
+router.post("/", validateEventData, createEvent);
+router.put("/:id", validateEventId, validateEventData, updateEvent);
+router.delete("/:id", validateEventId, deleteEvent);
+
 export default router;
