@@ -36,7 +36,6 @@ npm i nodemon
 
 ```bash
 node_modules
-.gitignore
 ```
 
 ### Tạo file app.js
