@@ -27,6 +27,18 @@ app.get("/products/:id", (req, res) => {
     return res.json(product);
 });
 
+app.delete("/products/:id", (req, res) => {
+    // tìm index của sản phẩm
+    const index = products.findIndex((p) => p.id === parseInt(req.params.id));
+    // nếu không tìm ra index thì trả về 404
+    if (index === -1) return res.status(404).json({ error: "Products not found" });
+
+    // Xóa sản phẩm
+    products.splice(index, 1);
+    // trả về phía client
+    return res.json({ success: true });
+});
+
 // khởi tạo server cổng 3000
 app.listen(3000, () => {
     console.log("Server đang chạy cổng 3000");
