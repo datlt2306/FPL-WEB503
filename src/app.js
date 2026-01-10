@@ -7,27 +7,27 @@ app.use(express.json());
 // Validation helper function
 const validateProduct = (data, isUpdate = false) => {
     const errors = {};
-    
+
     if (!isUpdate || data.name !== undefined) {
-        if (!data.name || typeof data.name !== 'string' || data.name.trim() === '') {
+        if (!data.name || typeof data.name !== "string" || data.name.trim() === "") {
             errors.name = "Name is required and must be a non-empty string";
         }
     }
-    
+
     if (!isUpdate || data.price !== undefined) {
-        if (data.price === undefined || typeof data.price !== 'number' || data.price <= 0) {
+        if (data.price === undefined || typeof data.price !== "number" || data.price <= 0) {
             errors.price = "Price is required and must be a positive number";
         }
     }
-    
+
     // For update, at least one field must be provided
     if (isUpdate && data.name === undefined && data.price === undefined) {
         errors.general = "At least one field (name or price) must be provided for update";
     }
-    
+
     return {
         isValid: Object.keys(errors).length === 0,
-        errors
+        errors,
     };
 };
 
@@ -44,7 +44,7 @@ app.get("/products", (req, res) => {
         return res.status(200).json(products);
     } catch (error) {
         return res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
         });
     }
 });
@@ -62,7 +62,7 @@ app.get("/products/:id", (req, res) => {
         return res.status(200).json(product);
     } catch (error) {
         return res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
         });
     }
 });
@@ -74,27 +74,27 @@ app.post("/products", (req, res) => {
         if (!validation.isValid) {
             return res.status(400).json({
                 message: "Validation error",
-                errors: validation.errors
+                errors: validation.errors,
             });
         }
-        
+
         // Generate ID tự động
-        const maxId = products.length > 0 ? Math.max(...products.map(p => p.id)) : 0;
+        const maxId = products.length > 0 ? Math.max(...products.map((p) => p.id)) : 0;
         const newId = maxId + 1;
-        
+
         // Tạo sản phẩm mới
         const newProduct = {
             id: newId,
             name: req.body.name.trim(),
-            price: Number(req.body.price)
+            price: Number(req.body.price),
         };
-        
+
         products.push(newProduct);
-        
+
         return res.status(201).json(newProduct);
     } catch (error) {
         return res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
         });
     }
 });
@@ -104,21 +104,21 @@ app.put("/products/:id", (req, res) => {
     try {
         const id = Number(req.params.id);
         const product = products.find((item) => item.id === id);
-        
+
         if (!product) {
             return res.status(404).json({
-                message: "Product not found"
+                message: "Product not found",
             });
         }
-        
+
         const validation = validateProduct(req.body, true);
         if (!validation.isValid) {
             return res.status(400).json({
                 message: "Validation error",
-                errors: validation.errors
+                errors: validation.errors,
             });
         }
-        
+
         // Update product
         if (req.body.name !== undefined) {
             product.name = req.body.name.trim();
@@ -126,11 +126,11 @@ app.put("/products/:id", (req, res) => {
         if (req.body.price !== undefined) {
             product.price = Number(req.body.price);
         }
-        
+
         return res.status(200).json(product);
     } catch (error) {
         return res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
         });
     }
 });
@@ -148,11 +148,11 @@ app.delete("/products/:id", (req, res) => {
         // Xóa sản phẩm
         products.splice(index, 1);
         return res.status(200).json({
-            message: "Product deleted successfully"
+            message: "Product deleted successfully",
         });
     } catch (error) {
         return res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
         });
     }
 });
