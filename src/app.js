@@ -3,6 +3,7 @@ import cors from "cors";
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 // khai báo router
 const products = [
@@ -14,6 +15,31 @@ const products = [
 // trả về danh sách sản phẩm
 app.get("/products", (req, res) => {
     return res.json(products);
+});
+
+// Thêm sản phẩm
+app.post("/products", (req, res) => {
+    const product = { id: products.length + 1, ...req.body }; // spread operator
+    products.push(product);
+    return res.status(201).json(products);
+});
+
+// Cập nhật sản phẩm
+app.put("/products/:id", (req, res) => {
+    const product = products.find((product) => product.id == req.params.id);
+    if (!product) {
+        return res.status(404).json({
+            message: "Khoong tim thay san pham",
+        });
+    }
+
+    // cập nhật
+    const { name, price } = req.body;
+
+    product.name = name || product.name;
+    product.price = price || product.price;
+
+    return res.json(product);
 });
 // Trả về chi tiết 1 sản phẩm
 app.get("/products/:id", (req, res) => {
