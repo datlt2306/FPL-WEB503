@@ -31,7 +31,9 @@ export const getOne = (req, res) => {
 
 export const createOne = (req, res) => {
     try {
-        return res.json(products);
+        const product = { id: products.length + 1, ...req.body }; // spread operator
+        products.push(product);
+        return res.status(201).json(product);
     } catch (error) {
         return res.status(400).json({
             message: error,
@@ -62,7 +64,19 @@ export const deleteOne = (req, res) => {
 
 export const updateOne = (req, res) => {
     try {
-        return res.json(products);
+        const product = products.find((item) => item.id === Number(req.params.id));
+        if (!product) {
+            return res.status(404).json({
+                message: "Product Not found",
+            });
+        }
+        // { name: "Sản phẩm 5 update", price: 600}
+        const { name, price } = req.body;
+
+        product.name = name || product.name;
+        product.price = price || product.price;
+
+        return res.json(product);
     } catch (error) {
         return res.status(400).json({
             message: error,
