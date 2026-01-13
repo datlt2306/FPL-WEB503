@@ -37,16 +37,9 @@ export const createOne = async (req, res) => {
     }
 };
 
-export const deleteOne = (req, res) => {
+export const deleteOne = async (req, res) => {
     try {
-        const index = products.findIndex((item) => item.id === req.params.id);
-        if (index == -1) {
-            return res.json({
-                message: "Product Not Found",
-            });
-        }
-
-        products.splice(index, 1);
+        await Product.findByIdAndDelete(req.params.id);
 
         return res.json({
             success: true,
@@ -58,19 +51,9 @@ export const deleteOne = (req, res) => {
     }
 };
 
-export const updateOne = (req, res) => {
+export const updateOne = async (req, res) => {
     try {
-        const product = products.find((item) => item.id === Number(req.params.id));
-        if (!product) {
-            return res.status(404).json({
-                message: "Product Not found",
-            });
-        }
-        // { name: "Sản phẩm 5 update", price: 600}
-        const { name, price } = req.body;
-
-        product.name = name || product.name;
-        product.price = price || product.price;
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
         return res.json(product);
     } catch (error) {
