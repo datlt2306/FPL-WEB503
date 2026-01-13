@@ -40,26 +40,28 @@ export const createOne = async (req, res) => {
     }
 };
 // Xóa sản phẩm
-export const deleteOne = (req, res) => {
-    const index = products.findIndex((p) => p.id === parseInt(req.params.id));
-    if (index === -1) return res.status(404).json({ error: "Products not found" });
-    products.splice(index, 1);
-    return res.json({ success: true });
-};
-// cập nhật sản phẩm
-export const updateOne = (req, res) => {
-    const product = products.find((product) => product.id == req.params.id);
-    if (!product) {
-        return res.status(404).json({
-            message: "Khoong tim thay san pham",
+export const deleteOne = async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        return res.json({
+            message: "Xóa sản phẩm thành công",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Loi khi xóa san pham",
+            error: error.message,
         });
     }
-
-    // cập nhật
-    const { name, price } = req.body;
-
-    product.name = name || product.name;
-    product.price = price || product.price;
-
-    return res.json(product);
+};
+// cập nhật sản phẩm
+export const updateOne = async (req, res) => {
+    try {
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        return res.json(product);
+    } catch (error) {
+        return res.status(500).json({
+            message: "Loi khi cập nhật san pham",
+            error: error.message,
+        });
+    }
 };
