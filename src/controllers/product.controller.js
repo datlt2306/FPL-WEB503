@@ -1,11 +1,8 @@
-const products = [
-    { id: 1, name: "Product 1", price: 101 }, // item
-    { id: 2, name: "Product 2", price: 200 }, // item
-    { id: 3, name: "Product 3", price: 300 }, // item
-];
+import Product from "../models/product.model";
 
-export const getAll = (req, res) => {
+export const getAll = async (req, res) => {
     try {
+        const products = await Product.find();
         return res.json(products);
     } catch (error) {
         return res.status(400).json({
@@ -13,9 +10,9 @@ export const getAll = (req, res) => {
         });
     }
 };
-export const getOne = (req, res) => {
+export const getOne = async (req, res) => {
     try {
-        const product = products.find((item) => item.id === req.params.id);
+        const product = await Product.findById(req.params.id);
         if (!product) {
             return res.status(404).json({
                 message: "Product Not found",
@@ -29,10 +26,9 @@ export const getOne = (req, res) => {
     }
 };
 
-export const createOne = (req, res) => {
+export const createOne = async (req, res) => {
     try {
-        const product = { id: products.length + 1, ...req.body }; // spread operator
-        products.push(product);
+        const product = await Product.create(req.body);
         return res.status(201).json(product);
     } catch (error) {
         return res.status(400).json({
