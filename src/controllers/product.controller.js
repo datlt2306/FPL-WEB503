@@ -1,28 +1,43 @@
-const products = [
-    { id: 1, name: "Product 1", price: 100 }, // product
-    { id: 2, name: "Product 2", price: 200 }, // product
-    { id: 3, name: "Product 3", price: 300 }, // product
-];
+import Product from "../models/product.model";
 
 // Lấy danh sách
-export const getAll = (req, res) => {
-    return res.json(products);
-};
-// trả về 1 sản phẩm
-export const getOne = (req, res) => {
-    const product = products.find((product) => product.id == req.params.id);
-    if (!product) {
-        return res.status(404).json({
-            message: "Khoong tim thay san pham",
+export const getAll = async (req, res) => {
+    try {
+        const products = await Product.find();
+        return res.json(products);
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
         });
     }
-    return res.json(product);
+};
+// trả về 1 sản phẩm
+export const getOne = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({
+                message: "không có sản phẩm nào!",
+            });
+        }
+        return res.json(product);
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
 };
 // Thêm sản phẩm
-export const createOne = (req, res) => {
-    const product = { id: products.length + 1, ...req.body }; // spread operator
-    products.push(product);
-    return res.status(201).json(product);
+export const createOne = async (req, res) => {
+    try {
+        const product = await Product.create(req.body);
+        return res.status(201).json(product);
+    } catch (error) {
+        return res.status(500).json({
+            message: "Loi khi tao san pham",
+            error: error.message,
+        });
+    }
 };
 // Xóa sản phẩm
 export const deleteOne = (req, res) => {
