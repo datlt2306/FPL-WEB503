@@ -5,6 +5,9 @@ const app = express();
 
 app.use(express.json());
 
+
+// middlewares
+
 app.use("/api", router);
 
 // Kết nối cơ sở dữ liệu
