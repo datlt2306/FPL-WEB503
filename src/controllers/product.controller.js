@@ -1,69 +1,37 @@
 import Product from "../models/product.model";
+import { asyncHandler } from "../utils/asyncHandler";
 
 
 
 // Lấy danh sách
-export const getAll = async (req, res) => {
-    try {
-        const products = await Product.find();
-        return res.json(products);
-    } catch (error) {
-        return res.status(500).json({
-            error: error.message,
-        });
-    }
-};
+export const getAll = asyncHandler(async (req, res) => {
+    const products = await Product.find();
+    return products;
+})
 // trả về 1 sản phẩm
-export const getOne = async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.id);
-        if (!product) {
-            return res.status(404).json({
-                message: "không có sản phẩm nào!",
-            });
-        }
-        return res.json(product);
-    } catch (error) {
-        return res.status(500).json({
-            error: error.message,
+export const getOne = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+        return res.status(404).json({
+            message: "không có sản phẩm nào!",
         });
     }
-};
+    return product;
+})
 // Thêm sản phẩm
-export const createOne = async (req, res) => {
-    try {
-        const product = await Product.create(req.body);
-        return res.status(201).json(product);
-    } catch (error) {
-        return res.status(500).json({
-            message: "Loi khi tao san pham",
-            error: error.message,
-        });
-    }
-};
+export const createOne = asyncHandler(async (req, res) => {
+    const product = await Product.create(req.body);
+    return product;
+})
 // Xóa sản phẩm
-export const deleteOne = async (req, res) => {
-    try {
-        await Product.findByIdAndDelete(req.params.id);
-        return res.json({
-            message: "Xóa sản phẩm thành công",
-        });
-    } catch (error) {
-        return res.status(500).json({
-            message: "Loi khi xóa san pham",
-            error: error.message,
-        });
+export const deleteOne = asyncHandler(async (req, res) => {
+    await Product.findByIdAndDelete(req.params.id);
+    return {
+        message: "Xóa sản phẩm thành công",
     }
-};
+})
 // cập nhật sản phẩm
-export const updateOne = async (req, res) => {
-    try {
-        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        return res.json(product);
-    } catch (error) {
-        return res.status(500).json({
-            message: "Loi khi cập nhật san pham",
-            error: error.message,
-        });
-    }
-};
+export const updateOne = asyncHandler(async (req, res) => {
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    return product
+})
