@@ -14,16 +14,18 @@ app.use("/api", router);
 mongoose
     .connect("mongodb://localhost:27017/WD20307")
     .then(() => {
-        console.log("Kết nối CSDL Thành công");
+        console.log("\x1b[32m✓\x1b[0m \x1b[1mKết nối CSDL Thành công\x1b[0m");
     })
     .catch(() => {
-        console.log("Lỗi kết nối DB");
+        console.log("\x1b[31m✗\x1b[0m \x1b[1mLỗi kết nối DB\x1b[0m");
     });
 
 // Port
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    const url = `http://localhost:${port}`;
+    console.log(`\x1b[34m\x1b[1mServer is running on port ${port}\x1b[0m`);
+    console.log(`\x1b[36m\x1b[4m\x1b]8;;${url}\x1b\\${url}\x1b]8;;\x1b\\\x1b[0m`);
 });
 
 // 1. Kết nối cơ sở dữ liệu
