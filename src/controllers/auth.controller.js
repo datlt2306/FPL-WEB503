@@ -1,8 +1,9 @@
 import { asyncHandler } from "../utils/asyncHandler";
 import bcrypt from "bcryptjs";
 import User from '../models/user.model'
+import jwt from 'jsonwebtoken'
 
-export const register = asyncHandler(async (req, res) => {
+export const signup = asyncHandler(async (req, res) => {
     // lấy dữ liệu từ client
     const { username, email, password } = req.body;
     // kiểm tra xem email có tồn tại không?
@@ -21,6 +22,31 @@ export const register = asyncHandler(async (req, res) => {
     // trả về thông báo
     return user;
 });
-export const login = asyncHandler(async (req, res) => {
+export const signin = asyncHandler(async (req, res) => {
+    // lấy dữ liệu từ client gửi lên
+    const { email, password } = req.body;
+    // tìm user dựa trên email
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(400).json({
+            message: "Email không tồn tại!"
+        })
+    };
+
+    // so sánh mật khẩu
+    const matchPassword = await bcrypt.compare(password, user.password);
+    if (!matchPassword) {
+        return res.status(400).json({
+            message: "Mật khẩu không đúng!"
+        })
+    }
+
+    // tạo token
+    const token = jwt.sign({ email: user.email, role: user.role }, "123456", { expiresIn: "1h" });
+
+    user.password = undefined;
+    return {
+        data: user, token
+    }
 
 });
