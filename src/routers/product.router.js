@@ -9,7 +9,7 @@ const productRouter = Router();
 productRouter.get("/", getAll);
 productRouter.get("/:id", getOne);
 productRouter.post("/", validateRequest(schema), createOne);
-productRouter.put("/:id",validateRequest(schema), updateOne);
+productRouter.put("/:id", validateRequest(schema), updateOne);
 productRouter.delete("/:id", deleteOne);
 
 // /products
