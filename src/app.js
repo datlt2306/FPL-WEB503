@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import postsRouter from "./routers/posts";
+import router from './routers'
+
 dotenv.config();
 
 const app = express();
@@ -13,7 +14,9 @@ const app = express();
 app.use(express.json());
 
 // router
-app.use('/api', postsRouter)
+app.use('/api', router);
+
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     const url = `http://localhost:${port}`;
