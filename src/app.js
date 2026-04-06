@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import postsRouter from "./routers/posts";
 dotenv.config();
 
 const app = express();
@@ -10,8 +11,9 @@ const app = express();
 // middleware
 
 app.use(express.json());
-// router
 
+// router
+app.use('/api', postsRouter)
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     const url = `http://localhost:${port}`;
