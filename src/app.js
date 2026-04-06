@@ -6,7 +6,7 @@ dotenv.config();
 const app = express();
 
 // Kết nối db
-mongoose.connect(`mongodb://localhost:27017/web503`);
+// mongoose.connect(`mongodb://localhost:27017/web503`);
 // middleware
 
 app.use(express.json());
@@ -14,5 +14,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    const url = `http://localhost:${port}`;
+    console.log(`\x1b[34m\x1b[1mServer is running on port ${port}\x1b[0m`);
+    console.log(`\x1b[36m\x1b[4m\x1b]8;;${url}\x1b\\${url}\x1b]8;;\x1b\\\x1b[0m`);
 });
