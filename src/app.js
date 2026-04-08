@@ -9,8 +9,9 @@ const app = express();
 
 // Kết nối db
 // mongoose.connect(`mongodb://localhost:27017/web503`);
-// middleware
 
+
+// middleware
 app.use(express.json());
 
 // router
