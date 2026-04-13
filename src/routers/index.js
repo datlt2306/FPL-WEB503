@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import postsRouter from "./posts.router";
 import usersRouter from "./users.router";
+import productsRouter from './products.router';
 const router = Router();
-
-// api/posts
 router.use('/posts', postsRouter);
-// api/users
+router.use('/products', productsRouter);
 router.use('/users', usersRouter);
 
 
