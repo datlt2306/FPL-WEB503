@@ -1,5 +1,13 @@
 import Post from "../models/posts.model"
 
+import Joi from 'joi'
+
+
+const postSchema = Joi.object({
+    title: Joi.string().required(),
+    content: Joi.string().required(),
+})
+
 export const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find();
@@ -29,6 +37,11 @@ export const getOne = async (req, res) => {
 }
 export const createPost = async (req, res) => {
     try {
+        const { error } = postSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errors = error.details.map(err => err.message);
+            return res.status(400).json(errors)
+        }
         const post = await Post.create(req.body);
         return res.status(201).json(post);
     } catch (error) {
@@ -40,6 +53,11 @@ export const createPost = async (req, res) => {
 }
 export const updatePost = async (req, res) => {
     try {
+        const { error } = postSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errors = error.details.map(err => err.message);
+            return res.status(400).json(errors)
+        }
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!post) return res.status(404).json({
             message: "Bài viết không tồn tại"
