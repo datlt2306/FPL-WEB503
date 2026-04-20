@@ -1,7 +1,5 @@
 import Post from "../models/posts.model"
-
 import Joi from 'joi'
-
 
 const postSchema = Joi.object({
     title: Joi.string().required(),
